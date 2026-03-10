@@ -13,7 +13,7 @@ class PyNovelController:
         self.fonte = fonte
         self.livro = livro
         self.epub = EpubService(livro)
-        self.webscraping = WebScrapingRequestService(fonte)
+        self.webscraping = WebScrapingService(fonte)
 
     def start(self):
         total_capitulos = self.fonte.total_capitulos
@@ -45,4 +45,4 @@ class PyNovelController:
                         traceback.print_exc()
                         break
             self.epub.gerarEpub()
-            # self.webscraping.endScraping()
+            self.webscraping.endScraping()
