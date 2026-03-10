@@ -19,6 +19,7 @@ class WebScrapingService:
         self.url = fonte.url_inicial
         self.driver = self.iniciarWebScrapping()
         self.wait = WebDriverWait(self.driver, 10)
+        self.chapter_regex = re.compile(r'Chapter \d+(:|\s)?')
 
     def iniciarWebScrapping(self):
         # Configurações do Chrome no modo headless (sem interface gráfica)
@@ -26,49 +27,54 @@ class WebScrapingService:
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--disable-images")
+        options.add_argument("--blink-settings=imagesEnabled=false")
         # Inicializa o WebDriver
         return webdriver.Chrome(options=options)
 
     # Função de limpeza do título
     def getTitulo(self, elemento):
         # Expressão regular para remover 'Chapter' e os números que seguem (opcionalmente com ':')
-        refined_title = re.sub(r'Chapter \d+(:|\s)?', '', elemento).strip()
         # Retorna o título limpo
-        return refined_title
+        return self.chapter_regex.sub('', elemento).strip()
 
     # Função para formatar o conteúdo como XHTML e converter para bytes
     def format_as_xhtml(self, content_list):
-        formatted_content = ''
+        parts = []
+
         for paragraph in content_list:
-            # Escape special characters in paragraph text
-            escaped_text = paragraph.text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-            formatted_content += f'<p>{escaped_text}</p>\n'
+            text = paragraph.text
+            escaped = (
+                text.replace('&', '&amp;')
+                    .replace('<', '&lt;')
+                    .replace('>', '&gt;')
+            )
+            parts.append(f"<p>{escaped}</p>")
         # Limpa o conteúdo XHTML com BeautifulSoup
         # soup = BeautifulSoup(formatted_content, 'html.parser')
         # Converte o conteúdo XHTML para bytes
-        return formatted_content.encode('utf-8')
+        return "\n".join(parts).encode("utf-8")
     
     def runChapter(self, cap):
         # Jogar o conteúdo do URL no WebDriver
         self.driver.get(f"{self.url}")
-
-        # Esperar o conteúdo aparecer
-        # contentElement = self.wait.until(
-        #     EC.visibility_of_element_located((By.ID, self.fonte.class_conteudo))
-        # )
 
         # Selecionar o conteúdo
         contentElement = self.driver.find_element(By.CLASS_NAME, self.fonte.class_conteudo) # By.ID ou By.CLASS_NAME
 
         # Selecionar o elemento do título
         if self.fonte.class_titulo != None:
-            tituloElement = self.driver.find_element(By.CLASS_NAME, self.fonte.class_titulo) # By.ID ou By.CLASS_NAME
+            tituloElement = contentElement.find_element(By.CLASS_NAME, self.fonte.class_titulo) # By.ID ou By.CLASS_NAME
         else:
             tituloElement = contentElement.find_element(By.TAG_NAME, self.fonte.tag_titulo)
+
         # Pegar o título
         titulo_limpo = self.getTitulo(tituloElement.text)
-        if titulo_limpo.find(":") == -1:
-            titulo = f'Chapter {cap}: ' + titulo_limpo
+
+        if ":" not in titulo_limpo:
+            titulo = f"Chapter {cap}: {titulo_limpo}"
         else:
             titulo = titulo_limpo
 
