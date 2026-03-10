@@ -101,7 +101,7 @@ class WebScrapingService:
         capitulo_atual = int(match.group(1))
         proximo_capitulo = capitulo_atual + 1
 
-        self.url.replace(f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}")
+        self.url = self.url.replace(f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}")
 
     def endScraping(self):
         # Fecha o driver ao final do processo

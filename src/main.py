@@ -11,7 +11,7 @@ idioma = "en"
 # Url sem o padrão de capítulos
 url_inicial = "https://freewebnovel.com/novel/immortality-through-array-formations/chapter-1"
 # Quantidade de capítulos
-total_capitulos = 2181
+total_capitulos = 10
 # Dados HTML
 class_titulo = None
 tag_titulo = "h4"
