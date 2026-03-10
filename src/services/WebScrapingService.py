@@ -66,17 +66,27 @@ class WebScrapingService:
 
         # Selecionar o elemento do título
         if self.fonte.class_titulo != None:
-            tituloElement = contentElement.find_element(By.CLASS_NAME, self.fonte.class_titulo) # By.ID ou By.CLASS_NAME
+            titulo_elements = contentElement.find_elements(By.CLASS_NAME, self.fonte.class_titulo)
+            if titulo_elements:
+                tituloElement = titulo_elements[0]
+            else:
+                tituloElement = None
         else:
-            tituloElement = contentElement.find_element(By.TAG_NAME, self.fonte.tag_titulo)
+            titulo_elements = contentElement.find_elements(By.TAG_NAME, self.fonte.tag_titulo)
+            if titulo_elements:
+                tituloElement = titulo_elements[0]
+            else:
+                tituloElement = None
 
-        # Pegar o título
-        titulo_limpo = self.getTitulo(tituloElement.text)
-
-        if ":" not in titulo_limpo:
-            titulo = f"Chapter {cap}: {titulo_limpo}"
+        if tituloElement is None:
+            titulo = f"Chapter {cap}"
         else:
-            titulo = titulo_limpo
+            # Pegar o título
+            titulo_limpo = self.getTitulo(tituloElement.text)
+            if ":" not in titulo_limpo:
+                titulo = f"Chapter {cap}: {titulo_limpo}"
+            else:
+                titulo = titulo_limpo
 
         # Pegar o conteúdo inteiro
         conteudo = contentElement.find_elements(By.TAG_NAME, self.fonte.tag_conteudo)
