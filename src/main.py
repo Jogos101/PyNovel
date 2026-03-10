@@ -1,3 +1,7 @@
+# pip install tqdm
+# pip install pypub3
+# pip install selenium
+
 # Importando controller
 from controller.PyNovelController import PyNovelController as PyNovel
 from entity.Livro import Livro
@@ -11,7 +15,7 @@ idioma = "en"
 # Url sem o padrão de capítulos
 url_inicial = "https://freewebnovel.com/novel/immortality-through-array-formations/chapter-1"
 # Quantidade de capítulos
-total_capitulos = 50# 2181
+total_capitulos = 2181
 # Dados HTML
 class_titulo = None
 tag_titulo = "h4"

@@ -6,7 +6,7 @@ from entity.Capitulo import Capitulo
 from entity.Fonte import Fonte
 from services.EpubService import EpubService
 from services.WebScrapingService import WebScrapingService
-from services.WebScrapingRequestService import WebScrapingRequestService
+# from services.WebScrapingRequestService import WebScrapingRequestService
 
 class PyNovelController:
     def __init__(self, fonte, livro):
