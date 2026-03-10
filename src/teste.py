@@ -1,44 +1,41 @@
 # Importando as bibliotecas necessárias
-# import pandas as pd
 from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-# from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-# from bs4 import BeautifulSoup
-from tqdm import tqdm
-# import time
-import re
-import pypub
 
-"""# Parâmetros"""
+from bs4 import BeautifulSoup
+
+from tqdm import tqdm
+
+import time
+
+import re
+
+import pypub
 
 # Configurações do Chrome no modo headless (sem interface gráfica)
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
 options.add_argument('--disable-dev-shm-usage')
-
 # Dados do livro
 titulo_livro = "I Am The Fated Villain"
 autor = "Fated Villain"
 idioma = "en"
-arquivo = "./livros/I-am-the-fated-villain"
-
+arquivo = "./I-am-the-fated-villain"
 # Url sem o padrão de capítulos
 url_inicial = "https://novelbin.lanovels.net/book/i-am-the-fated-villain/chapter-1-young-lord-gu-changge?subsite=1"
-
 # Quantidade de capítulos
 total_capitulos = 972
-
 # Dados HTML
 class_titulo = "chr-text"
 class_conteudo = "chr-content"
-next_chap = "next_chap"
+next = "next_chap"
 next_disabled = "disabled"
 tag_conteudo = "p"
 
-"""# Funções"""
 
 # Função de limpeza do título
 def getTitulo(elemento):
@@ -55,11 +52,10 @@ def format_as_xhtml(content_list):
     escaped_text = paragraph.text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
     formatted_content += f'<p>{escaped_text}</p>\n'
   # Limpa o conteúdo XHTML com BeautifulSoup
-  # soup = BeautifulSoup(formatted_content, 'html.parser')
+  soup = BeautifulSoup(formatted_content, 'html.parser')
   # Converte o conteúdo XHTML para bytes
   return formatted_content.encode('utf-8')
 
-"""# Web Scraping"""
 
 # Inicializa o WebDriver
 driver = webdriver.Chrome(options=options)
@@ -106,7 +102,7 @@ with tqdm(total=total_capitulos, desc="Processando", bar_format="{l_bar}{bar}| {
         pbar.refresh()
 
         # Seleciona o botão de próximo capítulo
-        next_button = driver.find_element(By.ID, next_chap) # By.ID ou By.CLASS_NAME
+        next_button = driver.find_element(By.ID, next) # By.ID ou By.CLASS_NAME
 
         # Verifica se o próximo botão está desativado
         if next_disabled in next_button.get_attribute('class') or next_button.get_attribute('disabled'):
