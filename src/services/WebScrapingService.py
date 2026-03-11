@@ -1,8 +1,7 @@
 from entity.Fonte import Fonte
 from entity.Capitulo import Capitulo
 from factory.FindElementFactory import FindElementFactory
-
-# import pandas as pd
+from services.WebScrapingInterface import WebScrapingInterface
 from selenium import webdriver
 # from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -13,8 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 # import time
 import re
 
-class WebScrapingService:
-    def __init__(self, fonte):
+class WebScrapingService(WebScrapingInterface):
+    def __init__(self, fonte: Fonte):
         self.fonte = fonte
         self.url = fonte.url_inicial
         self.driver = self.iniciarWebScrapping()
@@ -52,8 +51,6 @@ class WebScrapingService:
                     .replace('>', '&gt;')
             )
             parts.append(f"<p>{escaped}</p>")
-        # Limpa o conteúdo XHTML com BeautifulSoup
-        # soup = BeautifulSoup(formatted_content, 'html.parser')
         # Converte o conteúdo XHTML para bytes
         return "\n".join(parts).encode("utf-8")
     

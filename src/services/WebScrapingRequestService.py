@@ -1,13 +1,13 @@
 from entity.Fonte import Fonte
 from entity.Capitulo import Capitulo
 from factory.FindElementFactory import FindElementFactory
-
+from services.WebScrapingInterface import WebScrapingInterface
 import requests
 from bs4 import BeautifulSoup
 import re
 
-class WebScrapingRequestService:
-    def __init__(self, fonte):
+class WebScrapingRequestService(WebScrapingInterface):
+    def __init__(self, fonte: Fonte):
         self.fonte = fonte
         self.url = fonte.url_inicial
         self.session = requests.Session()
@@ -34,8 +34,6 @@ class WebScrapingRequestService:
                     .replace('>', '&gt;')
             )
             parts.append(f"<p>{escaped}</p>")
-        # Limpa o conteúdo XHTML com BeautifulSoup
-        # soup = BeautifulSoup(formatted_content, 'html.parser')
         # Converte o conteúdo XHTML para bytes
         return "\n".join(parts).encode("utf-8")
     

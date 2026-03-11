@@ -10,7 +10,7 @@ from services.WebScrapingService import WebScrapingService
 from services.WebScrapingRequestService import WebScrapingRequestService
 
 class PyNovelController:
-    def __init__(self, fonte, livro):
+    def __init__(self, fonte: Fonte, livro: Livro):
         self.fonte = fonte
         self.livro = livro
         self.epub = EpubService(livro)
