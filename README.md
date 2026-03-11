@@ -9,57 +9,76 @@ O projeto possui a seguinte estrutura de diretórios:
 ```
 PyNovel/
 ├── src/
-│   ├── main.py                      # Ponto de entrada da aplicação
-│   ├── teste.py                     # Testes ou exemplos de uso
+│   ├── main.py                        # Ponto de entrada da aplicação
 │   ├── controller/
-│   │   └── PyNovelController.py     # Controlador da lógica da aplicação
+│   │   ├── ColetarDadosController.py  # Controlador para coleta de dados
+│   │   └── PyNovelController.py       # Controlador da lógica da aplicação
 │   ├── entity/
-│   │   ├── Capitulo.py              # Classe que representa um capítulo de um livro
-│   │   ├── Fonte.py                 # Classe que representa a fonte de um livro ou capítulo
-│   │   └── Livro.py                 # Classe que representa um livro
+│   │   ├── Capitulo.py                # Classe que representa um capítulo de um livro
+│   │   ├── Fonte.py                   # Classe que representa a fonte de um livro ou capítulo
+│   │   └── Livro.py                   # Classe que representa um livro
 │   ├── factory/
-│   │   ├── FindElementFactory.py     # Fábrica para encontrar elementos em interfaces
-│   │   └── WebScraperFactory.py      # Fábrica para criar scrapers da web
+│   │   ├── FindElementFactory.py      # Fábrica para encontrar elementos em interfaces
+│   │   └── WebScraperFactory.py       # Fábrica para criar scrapers da web
 │   └── services/
-│       ├── EpubService.py            # Serviço para manipulação de arquivos EPUB
-│       ├── RequestScraperService.py  # Serviço para requisições HTTP
-│       ├── SeleniumScraperService.py # Serviço para scraping com Selenium
-│       └── WebScrapingInterface.py   # Interface para serviços de scraping
-├── reources/
-│   └── books/                        # Local onde são armazenados os Epubs gerados
-└── README.md                         # Documentação do projeto
+│       ├── EpubService.py             # Serviço para manipulação de arquivos EPUB
+│       ├── RequestScraperService.py   # Serviço para requisições HTTP
+│       ├── SeleniumScraperService.py  # Serviço para scraping com Selenium
+│       └── WebScrapingInterface.py    # Interface para servicos de scraping
+├── resources/
+│   └── books/                         # Local onde são armazenados os EPUBs gerados
+├── .dockerignore                      # Evita copiar arquivos indesejados para o Docker
+├── Dockerfile                         # Imagem da aplicação
+├── docker-compose.yml                 # Orquestração local via Docker Compose
+├── requirements.txt                   # Dependências Python
+└── README.md                          # Documentação do projeto
 ```
 
-## Instalação
-
-Para instalar o PyNovel, siga os passos abaixo:
+## Instalação (execucao local)
 
 1. Clone o repositório:
-   ```
+
+   ```bash
    git clone https://github.com/Jogos101/PyNovel
    ```
+
 2. Navegue até o diretório do projeto:
-   ```
+
+   ```bash
    cd PyNovel
    ```
-3. Instale as dependências necessárias
-   ```
-   pip install tqdm
-   pip install pypub3
-   pip install selenium
-   pip install requests
-   pip install beautifulsoup4
-   pip install inquirer
+
+3. Instale as dependencias:
+
+   ```bash
+   pip install -r requirements.txt
    ```
 
-## Uso
+## Uso (execucao local)
 
-Para executar a aplicação, utilize o seguinte comando:
+Na raiz do projeto, execute:
 
+```bash
+python src/main.py
 ```
-python main.py
-```
 
-## Contribuição
+## Uso com Docker Compose
+
+Pre-requisito: Docker e Docker Compose instalados.
+
+1. Na raiz do projeto, construa a imagem:
+
+   ```bash
+   docker compose build
+   ```
+
+2. Roda a aplicacao no terminal:
+
+   ```bash
+   docker compose run --rm app
+   ```
+
+
+## Contribuicao
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
