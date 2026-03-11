@@ -13,7 +13,8 @@ build/
 dist/
 *.egg-info/
 
-# Logs
+# Logs do Docker
+.docker/
 *.log
 
 # Environment variables
@@ -28,4 +29,5 @@ dist/
 Thumbs.db
 
 # Não enviar arquivos EPUB gerados
-*.epub
+resources/books/*.epub
+resources/books/
