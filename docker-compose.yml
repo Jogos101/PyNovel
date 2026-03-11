@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: pynovel-running
+    # Equivalente ao -it (Interatividade)
+    stdin_open: true
+    tty: true
+    # Equivalente ao -v (Volumes)
+    volumes:
+      - ./resources/books:/app/resources/books
+    # Garante que o container se limpe ao sair (similar ao --rm)
+    # Nota: O compose gerencia containers de forma diferente, 
+    # mas isso ajuda na organização.
+    restart: unless-stopped

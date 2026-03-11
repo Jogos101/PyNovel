@@ -1,0 +1,6 @@
+tqdm
+pypub3
+selenium
+requests
+beautifulsoup4
+inquirer

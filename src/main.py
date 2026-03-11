@@ -1,12 +1,3 @@
-# pip install tqdm
-# pip install pypub3
-# pip install selenium
-# pip install requests
-# pip install beautifulsoup4
-# pip install inquirer
-
-
-# Importando controller
 from controller.PyNovelController import PyNovelController as PyNovel
 from entity.Livro import Livro
 from entity.Fonte import Fonte
