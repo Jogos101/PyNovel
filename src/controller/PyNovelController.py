@@ -1,21 +1,18 @@
 import traceback
 # from bs4 import BeautifulSoup
-import time
 from tqdm import tqdm
 from entity.Livro import Livro
 from entity.Capitulo import Capitulo
 from entity.Fonte import Fonte
 from services.EpubService import EpubService
-from services.WebScrapingService import WebScrapingService
-from services.WebScrapingRequestService import WebScrapingRequestService
+from factory.WebScraperFactory import WebScraperFactory
 
 class PyNovelController:
-    def __init__(self, fonte: Fonte, livro: Livro):
+    def __init__(self, fonte: Fonte, livro: Livro, metodo):
         self.fonte = fonte
         self.livro = livro
         self.epub = EpubService(livro)
-        # self.webscraping = WebScrapingService(fonte)
-        self.webscraping = WebScrapingRequestService(fonte)
+        self.webscraping = WebScraperFactory(metodo, fonte).getWebScraper()
 
     def start(self):
         total_capitulos = self.fonte.total_capitulos
@@ -31,18 +28,17 @@ class PyNovelController:
                     pbar.update(1)
                     pbar.refresh()
 
-                    # if self.fonte.url_padrao == False: 
-                    #     # Seleciona o botão de próximo capítulo e verifica se está desativado
-                    #     if self.webscraping.updateNextButton() == False:
-                    #         print("Botão de próximo capítulo está desativado. Finalizando a coleta de capítulos.")
-                    #         pbar.n = pbar.total  # Força o progresso a 100%
-                    #         pbar.refresh()
-                    #         break  # Sai do loop se o botão está desativado
+                    if self.fonte.url_padrao == False: 
+                        # Seleciona o botão de próximo capítulo e verifica se está desativado
+                        if self.webscraping.updateNextButton() == False:
+                            print("Botão de próximo capítulo está desativado. Finalizando a coleta de capítulos.")
+                            pbar.n = pbar.total  # Força o progresso a 100%
+                            pbar.refresh()
+                            break  # Sai do loop se o botão está desativado
 
                     # Atualiza a URL para o próximo capítulo
                     if cap < total_capitulos:
                         self.webscraping.atualizaUrl()
-                    time.sleep(0.5)
                 except Exception as e:
                         print(f"Erro ao processar o capítulo {cap}: {e}")
                         traceback.print_exc()
