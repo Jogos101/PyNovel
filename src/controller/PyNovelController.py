@@ -1,19 +1,21 @@
 import traceback
 # from bs4 import BeautifulSoup
+import time
 from tqdm import tqdm
 from entity.Livro import Livro
 from entity.Capitulo import Capitulo
 from entity.Fonte import Fonte
 from services.EpubService import EpubService
 from services.WebScrapingService import WebScrapingService
-# from services.WebScrapingRequestService import WebScrapingRequestService
+from services.WebScrapingRequestService import WebScrapingRequestService
 
 class PyNovelController:
     def __init__(self, fonte, livro):
         self.fonte = fonte
         self.livro = livro
         self.epub = EpubService(livro)
-        self.webscraping = WebScrapingService(fonte)
+        # self.webscraping = WebScrapingService(fonte)
+        self.webscraping = WebScrapingRequestService(fonte)
 
     def start(self):
         total_capitulos = self.fonte.total_capitulos
@@ -40,9 +42,10 @@ class PyNovelController:
                     # Atualiza a URL para o próximo capítulo
                     if cap < total_capitulos:
                         self.webscraping.atualizaUrl()
+                    time.sleep(0.5)
                 except Exception as e:
                         print(f"Erro ao processar o capítulo {cap}: {e}")
                         traceback.print_exc()
                         break
             self.epub.gerarEpub()
-            self.webscraping.endScraping()
+            # self.webscraping.endScraping()

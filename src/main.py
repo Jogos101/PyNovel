@@ -1,6 +1,8 @@
 # pip install tqdm
 # pip install pypub3
 # pip install selenium
+# pip install requests
+# pip install beautifulsoup4
 
 # Importando controller
 from controller.PyNovelController import PyNovelController as PyNovel
