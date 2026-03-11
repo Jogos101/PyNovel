@@ -42,7 +42,7 @@ Para instalar o PyNovel, siga os passos abaixo:
    ```
    cd PyNovel
    ```
-3. Instale as dependências necessárias (se houver):
+3. Instale as dependências necessárias
    ```
    pip install tqdm
    pip install pypub3
