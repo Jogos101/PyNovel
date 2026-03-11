@@ -3,4 +3,4 @@ class Livro:
         self.titulo = titulo
         self.autor = autor
         self.idioma = idioma
-        self.arquivo = f"../livros/{titulo.replace(' ', '_')}"
+        self.arquivo = f"../books/{titulo.replace(' ', '_')}"

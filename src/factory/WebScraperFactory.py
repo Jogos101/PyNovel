@@ -11,7 +11,7 @@ class WebScraperFactory:
             case 'Selenium':
                 print("Running Selenium library")
                 return SeleniumScraperService(self.fonte)
-            case 'Request':
+            case 'Request(recommended)':
                 print("Running Request library")
                 return RequestScraperService(self.fonte)
             case _:

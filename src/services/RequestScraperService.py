@@ -7,21 +7,20 @@ from bs4 import BeautifulSoup
 import re
 import time
 
+
 class RequestScraperService(WebScrapingInterface):
     def __init__(self, fonte: Fonte):
         self.fonte = fonte
         self.url = fonte.url_inicial
         self.session = requests.Session()
-        self.headers = {
-            "User-Agent": "Mozilla/5.0"
-        }
-        self.chapter_regex = re.compile(r'Chapter \d+(:|\s)?')
+        self.headers = {"User-Agent": "Mozilla/5.0"}
+        self.chapter_regex = re.compile(r"Chapter \d+(:|\s)?")
 
     # Função de limpeza do título
     def getTitulo(self, elemento):
         # Expressão regular para remover 'Chapter' e os números que seguem (opcionalmente com ':')
         # Retorna o título limpo
-        return self.chapter_regex.sub('', elemento).strip()
+        return self.chapter_regex.sub("", elemento).strip()
 
     # Função para formatar o conteúdo como XHTML e converter para bytes
     def format_as_xhtml(self, content_list):
@@ -30,14 +29,12 @@ class RequestScraperService(WebScrapingInterface):
         for paragraph in content_list:
             text = paragraph.text
             escaped = (
-                text.replace('&', '&amp;')
-                    .replace('<', '&lt;')
-                    .replace('>', '&gt;')
+                text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
             )
             parts.append(f"<p>{escaped}</p>")
         # Converte o conteúdo XHTML para bytes
         return "\n".join(parts).encode("utf-8")
-    
+
     def runChapter(self, cap):
         time.sleep(0.5)
         response = self.session.get(self.url, headers=self.headers)
@@ -46,23 +43,16 @@ class RequestScraperService(WebScrapingInterface):
         soup = BeautifulSoup(response.text, "html.parser")
 
         # container do capítulo
-        contentElement = soup.find(
-            "div",
-            class_=self.fonte.class_conteudo
-        )
+        contentElement = soup.find("div", class_=self.fonte.class_conteudo)
 
         if contentElement is None:
             raise ValueError("Conteúdo do capítulo não encontrado")
 
         # título
         if self.fonte.class_titulo:
-            tituloElement = soup.find(
-                class_=self.fonte.class_titulo
-            )
+            tituloElement = soup.find(class_=self.fonte.class_titulo)
         else:
-            tituloElement = contentElement.find(
-                self.fonte.tag_titulo
-            )
+            tituloElement = contentElement.find(self.fonte.tag_titulo)
 
         if tituloElement is None:
             titulo = f"Chapter {cap}"
@@ -79,10 +69,10 @@ class RequestScraperService(WebScrapingInterface):
         texto_xhtml = self.format_as_xhtml(conteudo)
 
         return Capitulo(titulo, texto_xhtml, cap, self.url)
-    
+
     def updateNextButton(self):
         pass
-        
+
     def atualizaUrl(self):
         if self.fonte.url_padrao:
             self.getNextUrlPadrao()
@@ -90,7 +80,7 @@ class RequestScraperService(WebScrapingInterface):
         #     self.url = self.fonte.next_button.get_attribute('href')
 
     def getNextUrlPadrao(self):
-        match = re.search(r'chapter-(\d+)', self.url)
+        match = re.search(r"chapter-(\d+)", self.url)
 
         if not match:
             raise ValueError("Não foi possível identificar o número do capítulo na URL")
@@ -98,4 +88,6 @@ class RequestScraperService(WebScrapingInterface):
         capitulo_atual = int(match.group(1))
         proximo_capitulo = capitulo_atual + 1
 
-        self.url = self.url.replace(f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}")
+        self.url = self.url.replace(
+            f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}"
+        )
