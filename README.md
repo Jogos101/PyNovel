@@ -8,7 +8,7 @@ O projeto possui a seguinte estrutura de diretórios:
 
 ```
 PyNovel/
-├──src/
+├── src/
 │   ├── main.py                      # Ponto de entrada da aplicação
 │   ├── teste.py                     # Testes ou exemplos de uso
 │   ├── controller/
