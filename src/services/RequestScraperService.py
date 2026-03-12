@@ -16,11 +16,28 @@ class RequestScraperService(WebScrapingInterface):
         self.headers = {"User-Agent": "Mozilla/5.0"}
         self.chapter_regex = re.compile(r"Chapter \d+(:|\s)?")
 
-    # Função de limpeza do título
     def getTitulo(self, elemento):
-        # Expressão regular para remover 'Chapter' e os números que seguem (opcionalmente com ':')
-        # Retorna o título limpo
-        return self.chapter_regex.sub("", elemento).strip()
+        # 1. Regex que captura: "Chapter", espaço, números (ou intervalos como 20-18) 
+        # e qualquer combinação de ": ", " - " ou espaços que venham depois.
+        # A flag re.IGNORECASE garante que pegue 'chapter' ou 'Chapter'.
+        pattern = re.compile(r"Chapter\s+\d+(\s*-\s*\d+)?[:\s-]*", re.IGNORECASE)
+        
+        titulo_limpo = elemento.strip()
+        
+        # 2. Removemos o padrão repetidamente. 
+        # Isso resolve casos como "Chapter 1: Chapter 1: Título"
+        while pattern.match(titulo_limpo):
+            novo_titulo = pattern.sub("", titulo_limpo, count=1).strip()
+            # Se a limpeza resultar em vazio (ex: o título era só "Chapter 1"), 
+            # paramos para não perder a informação.
+            if not novo_titulo:
+                break
+            titulo_limpo = novo_titulo
+            
+        # 3. Remove caracteres residuais que sobraram no início (como ":" ou "-")
+        titulo_limpo = re.sub(r"^[偏\s:-]+", "", titulo_limpo)
+        
+        return titulo_limpo
 
     # Função para formatar o conteúdo como XHTML e converter para bytes
     def format_as_xhtml(self, content_list):
@@ -72,12 +89,14 @@ class RequestScraperService(WebScrapingInterface):
         if tituloElement is None:
             titulo = f"Chapter {cap}"
         else:
-            titulo_limpo = self.getTitulo(tituloElement.get_text())
-
-            if ":" not in titulo_limpo:
-                titulo = f"Chapter {cap}: {titulo_limpo}"
+            titulo_real = self.getTitulo(tituloElement.get_text())
+            
+            # Se o título real for vazio ou apenas um número, usamos o padrão básico
+            if not titulo_real or titulo_real.isdigit():
+                titulo = f"Chapter {cap}"
             else:
-                titulo = titulo_limpo
+                # Padronização final: Sempre "Chapter X: Título"
+                titulo = f"Chapter {cap}: {titulo_real}"
 
         # conteúdo
         conteudo = contentElement.find_all(self.fonte.tag_conteudo)
