@@ -16,3 +16,6 @@ resources/books/
 
 # Não enviar arquivos EPUB gerados
 *.epub
+
+# Não enviar arquivos JSON de exemplo
+exemplo_source.json

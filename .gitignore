@@ -29,5 +29,8 @@ dist/
 Thumbs.db
 
 # Não enviar arquivos EPUB gerados
-resources/books/*.epub
-resources/books/
+*.epub
+
+# Não enviar arquivos JSON de fontes exceto o de exemplo
+*.json
+!exemplo_source.json

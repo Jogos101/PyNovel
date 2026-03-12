@@ -1,0 +1,25 @@
+{
+    "Name": "Nome do livro",
+    "autor": "Autor do livro",
+    "idioma": "en",
+    "comentario_1": "link do primeiro capítulo do livro",
+    "url_inicial": "https://sitedolivro/titulodolivro/chapter-1",
+    "total_capitulos": 15,
+    "comentario_2": "Informe por qual parâmetro o sistema pode identificar o título do capítulo e o conteúdo do capítulo. Pode ser pelo 'id', 'class' ou 'tag' presenter no elemento do site.",
+    "titulo": {
+        "id": null,
+        "class": "char-titulo",
+        "tag": null
+    },
+    "conteudo": {
+        "id": "char-conteudo",
+        "class": null,
+        "tag": null
+    },
+    "comentario_3": "Se a URL do próximo capítulo segue um padrão, como 'chapter-2', 'chapter-3', etc.",
+    "url_padrao": true,
+    "comentario_4": "Se a URL do próximo capítulo não segue um padrão, informe o id do elemento que contém o link para o próximo capítulo.",
+    "next_chap": null,
+    "next_disabled": "disabled",
+    "tag_conteudo": "p"
+}

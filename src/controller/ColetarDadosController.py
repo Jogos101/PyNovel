@@ -1,5 +1,7 @@
 from entity.Livro import Livro
 from entity.Fonte import Fonte
+from pathlib import Path
+import json
 import inquirer
 
 class ColetarDadosController:
@@ -8,36 +10,63 @@ class ColetarDadosController:
 
     def coletar(self):
         # Coletar o método de coleta de dados
-        questions = [
+        library = [
         inquirer.List('WebScraper',
             message="Qual método de coleta você deseja?",
             choices=['Request(recommended)', 'Selenium'],
         ),
         ]
-        answers = inquirer.prompt(questions)
+        answers = inquirer.prompt(library)
         metodo = answers["WebScraper"]
 
-        # Dados do livro
-        titulo_livro = "Immortality Through Array Formations"
-        autor = "Observing the Emptiness, 观虚"
-        idioma = "en"
+        sources = [
+        inquirer.List('Fonte',
+            message="Qual fonte você deseja coletar?",
+            choices=self.listarFontes(),
+        ),
+        ]
+        answers = inquirer.prompt(sources)
+        fonte_selecionada = answers["Fonte"]
 
-        # Url sem o padrão de capítulos
-        url_inicial = "https://freewebnovel.com/novel/immortality-through-array-formations/chapter-1"
-        # Quantidade de capítulos
-        total_capitulos = 10
-        # Dados HTML
-        class_titulo = None
-        tag_titulo = "h4"
-        class_conteudo = "txt"
-        id_conteudo = None
-        url_padrao = True
-        next_chap = "next_chap"
-        next_disabled = "disabled"
-        tag_conteudo = "p"
-
-        livro = Livro(titulo_livro, autor, idioma)
+        # titulo, autor, idioma
+        livro = Livro(*self.getDadosLivro(fonte_selecionada))
         # url, url_padrao, total_capitulos, class_titulo, tag_titulo, class_conteudo, next_chap, next_end, tag_conteudo
-        fonte = Fonte(url_inicial, url_padrao, total_capitulos, class_titulo, tag_titulo, class_conteudo, next_chap, next_disabled, tag_conteudo)
+        fonte = Fonte(*self.getDadosFonte(fonte_selecionada))
+
+        print("Quantos capítulos deseja coletar? (Digite 0 para coletar todos)")
+        total_capitulos = int(input())
+        if total_capitulos > 0:
+            fonte.total_capitulos = total_capitulos
 
         return (fonte, livro, metodo)
+    
+    def listarFontes(self):
+        # Listar as fontes disponíveis
+        base_path = Path(__file__).resolve().parent.parent.parent
+        fontes_dir = base_path / "resources" / "sources"
+
+        # Cria o diretório de saída se ele não existir
+        fontes_dir.mkdir(parents=True, exist_ok=True)
+
+        fontes = [f.stem for f in fontes_dir.glob("*.json") if f.stem != 'exemplo_source']
+        return fontes
+    
+    def getDadosLivro(self, fonte_selecionada):
+        # Carregar os dados do livro a partir do arquivo JSON
+        base_path = Path(__file__).resolve().parent.parent.parent
+        fonte_path = base_path / "resources" / "sources" / f"{fonte_selecionada}.json"
+
+        with open(fonte_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+        return (data["Name"], data["autor"], data.get("idioma", "en"))
+    
+    def getDadosFonte(self, fonte_selecionada):
+        # Carregar os dados da fonte a partir do arquivo JSON
+        base_path = Path(__file__).resolve().parent.parent.parent
+        fonte_path = base_path / "resources" / "sources" / f"{fonte_selecionada}.json"
+
+        with open(fonte_path, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+        return (data["url_inicial"], data["url_padrao"], data["total_capitulos"], data["titulo"], data["conteudo"], data["next_chap"], data["next_disabled"], data["tag_conteudo"])

@@ -43,16 +43,31 @@ class RequestScraperService(WebScrapingInterface):
         soup = BeautifulSoup(response.text, "html.parser")
 
         # container do capítulo
-        contentElement = soup.find("div", class_=self.fonte.class_conteudo)
+        match list(self.fonte.getConteudo().keys())[0]:
+            case "class":
+                contentElement = soup.find("div", class_=list(self.fonte.getConteudo().values())[0])
+            case "id":
+                contentElement = soup.find("div", id=list(self.fonte.getConteudo().values())[0])
+            case _:
+                raise ValueError("Tipo de busca para conteúdo do capítulo não suportado")
 
         if contentElement is None:
             raise ValueError("Conteúdo do capítulo não encontrado")
 
         # título
-        if self.fonte.class_titulo:
-            tituloElement = soup.find(class_=self.fonte.class_titulo)
-        else:
-            tituloElement = contentElement.find(self.fonte.tag_titulo)
+        match list(self.fonte.getTitulo().keys())[0]:
+            case "class":
+                tituloElement = soup.find(class_=list(self.fonte.getTitulo().values())[0])
+            case "id":
+                tituloElement = soup.find(id=list(self.fonte.getTitulo().values())[0])
+            case "tag":
+                tituloElement = contentElement.find(list(self.fonte.getTitulo().values())[0])
+            case _:
+                raise ValueError("Tipo de busca para título do capítulo não suportado")
+        # if self.fonte.class_titulo:
+        #     tituloElement = soup.find(class_=self.fonte.class_titulo)
+        # else:
+        #     tituloElement = contentElement.find(self.fonte.tag_titulo)
 
         if tituloElement is None:
             titulo = f"Chapter {cap}"
