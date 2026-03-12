@@ -79,6 +79,6 @@ Pre-requisito: Docker e Docker Compose instalados.
    ```
 
 
-## Contribuicao
+## Contribuição
 
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
