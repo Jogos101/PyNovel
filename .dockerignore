@@ -19,3 +19,6 @@ resources/books/
 
 # Não enviar arquivos JSON de exemplo
 exemplo_source.json
+
+# Não enviar capas de livros de exemplo
+exemplo_source.jpg

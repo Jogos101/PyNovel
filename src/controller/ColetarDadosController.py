@@ -59,7 +59,12 @@ class ColetarDadosController:
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        return (data["Name"], data["autor"], data.get("idioma", "en"))
+        cover_path = base_path / "resources" / "covers" / f"{fonte_selecionada}.jpg"
+        cover = None
+        if cover_path.exists():
+            cover = str(cover_path)
+
+        return (data["Name"], data["autor"], data.get("idioma", "en"), cover)
     
     def getDadosFonte(self, fonte_selecionada):
         # Carregar os dados da fonte a partir do arquivo JSON

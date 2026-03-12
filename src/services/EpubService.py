@@ -6,7 +6,7 @@ from entity.Capitulo import Capitulo
 class EpubService:
     def __init__(self, livro):
         self.livro = livro
-        self.epub = pypub.Epub(self.livro.titulo, self.livro.autor, self.livro.idioma)
+        self.epub = pypub.Epub(self.livro.titulo, self.livro.autor, self.livro.idioma, cover=self.livro.cover)
 
     def criarCapitulo(self, capitulo):
         # Cria o capítulo com conteúdo e título

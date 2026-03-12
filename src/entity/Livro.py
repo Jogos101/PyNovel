@@ -1,10 +1,11 @@
 import re
 
 class Livro:
-    def __init__(self, titulo, autor, idioma='en'):
+    def __init__(self, titulo, autor, idioma='en', cover=None):
         self.titulo = titulo
         self.autor = autor
         self.idioma = idioma
+        self.cover = cover
 
     def getTituloLimpo(self):
         # Limpa o título para evitar caracteres inválidos em nomes de arquivos
