@@ -52,4 +52,4 @@ class PyNovelController:
                     traceback.print_exc()
                     break
             self.epub.gerarEpub()
-            # self.webscraping.endScraping()
+            self.webscraping.endScraping()

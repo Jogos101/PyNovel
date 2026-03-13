@@ -14,7 +14,6 @@ class RequestScraperService(WebScrapingInterface):
         self.url = fonte.url_inicial
         self.session = requests.Session()
         self.headers = {"User-Agent": "Mozilla/5.0"}
-        self.chapter_regex = re.compile(r"Chapter \d+(:|\s)?")
 
     def getTitulo(self, elemento):
         # 1. Regex que captura: "Chapter", espaço, números (ou intervalos como 20-18) 
@@ -46,7 +45,9 @@ class RequestScraperService(WebScrapingInterface):
         for paragraph in content_list:
             text = paragraph.text
             escaped = (
-                text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+                text.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
             )
             parts.append(f"<p>{escaped}</p>")
         # Converte o conteúdo XHTML para bytes
@@ -81,10 +82,6 @@ class RequestScraperService(WebScrapingInterface):
                 tituloElement = contentElement.find(list(self.fonte.getTitulo().values())[0])
             case _:
                 raise ValueError("Tipo de busca para título do capítulo não suportado")
-        # if self.fonte.class_titulo:
-        #     tituloElement = soup.find(class_=self.fonte.class_titulo)
-        # else:
-        #     tituloElement = contentElement.find(self.fonte.tag_titulo)
 
         if tituloElement is None:
             titulo = f"Chapter {cap}"
@@ -125,3 +122,6 @@ class RequestScraperService(WebScrapingInterface):
         self.url = self.url.replace(
             f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}"
         )
+
+    def endScraping(self):
+        pass
