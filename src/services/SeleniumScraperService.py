@@ -32,21 +32,14 @@ class SeleniumScraperService(WebScrapingInterface):
         # Inicializa o WebDriver
         return webdriver.Chrome(options=options)
 
-    # Função de limpeza do título
     def getTitulo(self, elemento):
-        # 1. Regex que captura: "Chapter", espaço, números (ou intervalos como 20-18) 
-        # e qualquer combinação de ": ", " - " ou espaços que venham depois.
-        # A flag re.IGNORECASE garante que pegue 'chapter' ou 'Chapter'.
         pattern = re.compile(r"Chapter\s+\d+(\s*-\s*\d+)?[:\s-]*", re.IGNORECASE)
         
         titulo_limpo = elemento.text.strip()
         
         # 2. Removemos o padrão repetidamente. 
-        # Isso resolve casos como "Chapter 1: Chapter 1: Título"
         while pattern.match(titulo_limpo):
             novo_titulo = pattern.sub("", titulo_limpo, count=1).strip()
-            # Se a limpeza resultar em vazio (ex: o título era só "Chapter 1"), 
-            # paramos para não perder a informação.
             if not novo_titulo:
                 break
             titulo_limpo = novo_titulo
@@ -56,7 +49,6 @@ class SeleniumScraperService(WebScrapingInterface):
         
         return titulo_limpo
 
-    # Função para formatar o conteúdo como XHTML e converter para bytes
     def format_as_xhtml(self, content_list):
         parts = []
 
@@ -68,7 +60,6 @@ class SeleniumScraperService(WebScrapingInterface):
                     .replace('>', '&gt;')
             )
             parts.append(f"<p>{escaped}</p>")
-        # Converte o conteúdo XHTML para bytes
         return "\n".join(parts).encode("utf-8")
     
     def runChapter(self, cap):
