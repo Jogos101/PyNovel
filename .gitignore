@@ -28,6 +28,11 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+
 # Não enviar arquivos EPUB gerados
 *.epub
 
