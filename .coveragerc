@@ -1,0 +1,13 @@
+[run]
+relative_files = True
+source = src
+
+[report]
+omit =
+	test/*
+	*/__init__.py
+
+[paths]
+source =
+	src
+	/app/src
