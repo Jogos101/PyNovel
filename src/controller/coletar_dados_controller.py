@@ -1,7 +1,7 @@
-from entity.Livro import Livro
-from entity.Fonte import Fonte
+from entity.livro import Livro
+from entity.fonte import Fonte
 from services.resource_collector_service import ResourceCollector
-import inquirer
+import inquirer # type: ignore
 
 class ColetarDadosController:
     def __init__(self):

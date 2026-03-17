@@ -1,7 +1,7 @@
-from application.PyNovelApplication import PyNovelApplication
-from controller.PyNovelController import PyNovelController as PyNovel
-from controller.ColetarDadosController import ColetarDadosController as ColetarDados
-from factory.WebScraperFactory import WebScraperFactory
+from application.pynovel_application import PyNovelApplication
+from controller.pynovel_controller import PyNovelController as PyNovel
+from controller.coletar_dados_controller import ColetarDadosController as ColetarDados
+from factory.web_scraper_factory import WebScraperFactory
 from services import epub_service
 
 def main():

@@ -1,5 +1,5 @@
 import unittest
-from src.entity.Livro import Livro
+from src.entity.livro import Livro
 
 class TestLivro(unittest.TestCase):
     def setUp(self):

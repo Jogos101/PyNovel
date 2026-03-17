@@ -1,5 +1,5 @@
 import unittest
-from src.entity.Fonte import Fonte
+from src.entity.fonte import Fonte
 
 class TestFonte(unittest.TestCase):
     def setUp(self):

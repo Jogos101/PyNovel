@@ -1,9 +1,9 @@
-from entity.Fonte import Fonte
-from entity.Capitulo import Capitulo
-from factory.FindElementFactory import FindElementFactory
+from entity.fonte import Fonte
+from entity.capitulo import Capitulo
+from factory.find_element_factory import FindElementFactory
 from services.web_scraping_interface import WebScrapingInterface
-import requests
-from bs4 import BeautifulSoup
+import requests # type: ignore
+from bs4 import BeautifulSoup # type: ignore
 import re
 import time
 

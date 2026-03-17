@@ -1,14 +1,14 @@
-from entity.Fonte import Fonte
-from entity.Capitulo import Capitulo
-from factory.FindElementFactory import FindElementFactory
+from entity.fonte import Fonte
+from entity.capitulo import Capitulo
+from factory.find_element_factory import FindElementFactory
 from services.web_scraping_interface import WebScrapingInterface
-from selenium import webdriver
+from selenium import webdriver # type: ignore
 # from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
+from selenium.webdriver.common.by import By # type: ignore
 # from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options # type: ignore
+from selenium.webdriver.support.ui import WebDriverWait # type: ignore
+from selenium.webdriver.support import expected_conditions as EC # type: ignore
 # import time
 import re
 

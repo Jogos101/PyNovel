@@ -1,6 +1,6 @@
-import controller.PyNovelController
-import controller.ColetarDadosController
-import factory.WebScraperFactory
+import controller.pynovel_controller
+import controller.coletar_dados_controller
+import factory.web_scraper_factory
 import services.epub_service
 
 class PyNovelApplication:
