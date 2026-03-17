@@ -10,14 +10,13 @@ from factory.WebScraperFactory import WebScraperFactory
 
 
 class PyNovelController:
-    def __init__(self, fonte: Fonte, livro: Livro, metodo):
+    def __init__(self, fonte: Fonte, livro: Livro, webscraping, epub):
         self.fonte = fonte
         self.livro = livro
-        self.epub = EpubService(livro)
-        self.webscraping = WebScraperFactory(metodo, fonte).getWebScraper()
-        self.run()
+        self.epub = epub
+        self.webscraping = webscraping
 
-    def run(self):
+    def execute(self):
         with tqdm(
             total=self.fonte.total_capitulos,
             desc="Processando",
