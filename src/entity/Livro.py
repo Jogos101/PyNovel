@@ -7,6 +7,6 @@ class Livro:
         self.idioma = idioma
         self.cover = cover
 
-    def getTituloLimpo(self):
+    def get_titulo_limpo(self):
         # Limpa o título para evitar caracteres inválidos em nomes de arquivos
         return re.sub(r'[\\/*?:"<>|]', "", self.titulo).replace(' ', '_')
