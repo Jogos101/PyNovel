@@ -1,5 +1,5 @@
 import unittest
-from src.entity.Capitulo import Capitulo
+from src.entity.capitulo import Capitulo
 
 class TestCapitulo(unittest.TestCase):
     def setUp(self):
