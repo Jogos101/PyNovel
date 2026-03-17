@@ -1,5 +1,5 @@
 # Versão do Python utilizada
-FROM python:3.14-slim as base
+FROM python:3.14-slim AS base
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH=/app
 
-FROM base as test
+FROM base AS test
 COPY . .
 # Rodar apenas o teste de unidades
 CMD ["python", "-m", "unittest", "discover", "-s", "test", "-p", "test_*.py", "-v"]
