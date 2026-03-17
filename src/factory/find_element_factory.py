@@ -4,7 +4,7 @@ class FindElementFactory:
     def __init__(self):
         pass
 
-    def getArgs(self, element):
+    def get_args(self, element):
         match element.keys():
             case "id":
                 tipo = By.ID

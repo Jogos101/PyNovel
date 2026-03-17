@@ -1,12 +1,12 @@
-from services.SeleniumScraperService import SeleniumScraperService
-from services.RequestScraperService import RequestScraperService
+from services.selenium_scraper_service import SeleniumScraperService
+from services.request_scraper_service import RequestScraperService
 
 class WebScraperFactory:
     def __init__(self, metodo, fonte):
         self.metodo = metodo
         self.fonte = fonte
 
-    def getWebScraper(self):
+    def get_web_scraper(self):
         match self.metodo:
             case 'Selenium':
                 print("Running Selenium library")

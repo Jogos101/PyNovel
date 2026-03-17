@@ -8,28 +8,28 @@ class EpubService:
         self.livro = livro
         self.epub = pypub.Epub(self.livro.titulo, self.livro.autor, self.livro.idioma, cover=self.livro.cover)
 
-    def criarCapitulo(self, capitulo):
+    def criar_capitulo(self, capitulo):
         # Cria o capítulo com conteúdo e título
         self.epub.add_chapter(pypub.Chapter(title=capitulo.titulo, content=capitulo.conteudo, url=capitulo.url))
 
     # ../../resources/books/{titulo_limpo}{versao}.epub
-    def gerarEpub(self):
-        arquivo = self.setArquivo()
+    def gerar_epub(self):
+        arquivo = self.set_arquivo()
 
         self.epub.create(str(arquivo))
         print(f"Arquivo EPUB criado em: {arquivo}")
 
-    def setArquivo(self):
+    def set_arquivo(self):
         base_path = Path(__file__).resolve().parent.parent.parent
         output_dir = base_path / "resources" / "books"
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        caminho_arquivo = self.controlarConcorrencia(output_dir)
+        caminho_arquivo = self.controlar_concorrencia(output_dir)
         return caminho_arquivo
     
-    def controlarConcorrencia(self, output_dir):
+    def controlar_concorrencia(self, output_dir):
         # Controlar concorrência de nome de arquivo
-        nome_arquivo = self.livro.getTituloLimpo()
+        nome_arquivo = self.livro.get_titulo_limpo()
         extensao = ".epub"
         caminho_arquivo = output_dir / f"{nome_arquivo}{extensao}"
 

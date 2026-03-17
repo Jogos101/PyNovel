@@ -1,7 +1,7 @@
 import controller.PyNovelController
 import controller.ColetarDadosController
 import factory.WebScraperFactory
-import services.EpubService
+import services.epub_service
 
 class PyNovelApplication:
     def __init__(self, coletar_dados_controller, webscraper_factory, epub_service, pynovel_controller):

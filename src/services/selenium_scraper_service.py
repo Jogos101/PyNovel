@@ -1,7 +1,7 @@
 from entity.Fonte import Fonte
 from entity.Capitulo import Capitulo
 from factory.FindElementFactory import FindElementFactory
-from services.WebScrapingInterface import WebScrapingInterface
+from services.web_scraping_interface import WebScrapingInterface
 from selenium import webdriver
 # from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -16,10 +16,10 @@ class SeleniumScraperService(WebScrapingInterface):
     def __init__(self, fonte: Fonte):
         self.fonte = fonte
         self.url = fonte.url_inicial
-        self.driver = self.iniciarWebScrapping()
+        self.driver = self.iniciar_web_scrapping()
         self.wait = WebDriverWait(self.driver, 10)
 
-    def iniciarWebScrapping(self):
+    def iniciar_web_scrapping(self):
         # Configurações do Chrome no modo headless (sem interface gráfica)
         options = Options()
         options.add_argument('--headless')
@@ -32,7 +32,7 @@ class SeleniumScraperService(WebScrapingInterface):
         # Inicializa o WebDriver
         return webdriver.Chrome(options=options)
 
-    def getTitulo(self, elemento):
+    def get_titulo(self, elemento):
         pattern = re.compile(r"Chapter\s+\d+(\s*-\s*\d+)?[:\s-]*", re.IGNORECASE)
         
         titulo_limpo = elemento.text.strip()
@@ -62,7 +62,7 @@ class SeleniumScraperService(WebScrapingInterface):
             parts.append(f"<p>{escaped}</p>")
         return "\n".join(parts).encode("utf-8")
     
-    def runChapter(self, cap):
+    def run_chapter(self, cap):
         # Jogar o conteúdo do URL no WebDriver
         self.driver.get(f"{self.url}")
 
@@ -100,7 +100,7 @@ class SeleniumScraperService(WebScrapingInterface):
         if tituloElement is None:
             titulo = f"Chapter {cap}"
         else:
-            titulo_real = self.getTitulo(tituloElement)
+            titulo_real = self.get_titulo(tituloElement)
             
             # Se o título real for vazio ou apenas um número, usamos o padrão básico
             if not titulo_real or titulo_real.isdigit():
@@ -116,20 +116,20 @@ class SeleniumScraperService(WebScrapingInterface):
 
         return Capitulo(titulo, texto_xhtml, cap, self.url)
 
-    def updateNextButton(self):
+    def update_next_button(self):
         self.fonte.next_button = self.driver.find_element(By.ID, self.fonte.next_chap) # By.ID ou By.CLASS_NAME
         if self.next_disabled in self.fonte.next_button.get_attribute('class') or self.fonte.next_button.get_attribute('disabled'):
             return False
         else:
             return True
         
-    def atualizaUrl(self):
+    def atualiza_url(self):
         if self.fonte.url_padrao:
-            self.getNextUrlPadrao()
+            self.get_next_url_padrao()
         else:
             self.url = self.fonte.next_button.get_attribute('href')
 
-    def getNextUrlPadrao(self):
+    def get_next_url_padrao(self):
         match = re.search(r'chapter-(\d+)', self.url)
 
         if not match:
@@ -140,6 +140,6 @@ class SeleniumScraperService(WebScrapingInterface):
 
         self.url = self.url.replace(f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}")
 
-    def endScraping(self):
+    def end_scraping(self):
         # Fecha o driver ao final do processo
         self.driver.quit()

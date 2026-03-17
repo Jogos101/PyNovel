@@ -1,7 +1,7 @@
 from entity.Fonte import Fonte
 from entity.Capitulo import Capitulo
 from factory.FindElementFactory import FindElementFactory
-from services.WebScrapingInterface import WebScrapingInterface
+from services.web_scraping_interface import WebScrapingInterface
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -15,7 +15,7 @@ class RequestScraperService(WebScrapingInterface):
         self.session = requests.Session()
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
-    def getTitulo(self, elemento):
+    def get_titulo(self, elemento):
         # 1. Regex que captura: "Chapter", espaço, números (ou intervalos como 20-18) 
         pattern = re.compile(r"Chapter\s+\d+(\s*-\s*\d+)?[:\s-]*", re.IGNORECASE)
         
@@ -80,7 +80,7 @@ class RequestScraperService(WebScrapingInterface):
         if tituloElement is None:
             titulo = f"Chapter {cap}"
         else:
-            titulo_real = self.getTitulo(tituloElement.get_text())
+            titulo_real = self.get_titulo(tituloElement.get_text())
             
             # Se o título real for vazio ou apenas um número, usamos o padrão básico
             if not titulo_real or titulo_real.isdigit():
@@ -95,16 +95,16 @@ class RequestScraperService(WebScrapingInterface):
 
         return Capitulo(titulo, texto_xhtml, cap, self.url)
 
-    def updateNextButton(self):
+    def update_next_button(self):
         raise NotImplementedError("Este método não é aplicável para RequestScraperService, pois não há interação com botões.")
 
-    def atualizaUrl(self):
+    def atualiza_url(self):
         if self.fonte.url_padrao:
-            self.getNextUrlPadrao()
+            self.get_next_url_padrao()
         else:
             self.url = self.fonte.next_button.get_attribute('href')
 
-    def getNextUrlPadrao(self):
+    def get_next_url_padrao(self):
         match = re.search(r"chapter-(\d+)", self.url)
 
         if not match:
@@ -117,5 +117,5 @@ class RequestScraperService(WebScrapingInterface):
             f"chapter-{capitulo_atual}", f"chapter-{proximo_capitulo}"
         )
 
-    def endScraping(self):
+    def end_scraping(self):
         pass
