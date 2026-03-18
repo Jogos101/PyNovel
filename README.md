@@ -38,28 +38,28 @@ PyNovel/
 
 1. Clone o repositório:
 
-   ```bash
+```bash
    git clone https://github.com/Jogos101/PyNovel
-   ```
+```
 
 2. Navegue até o diretório do projeto:
 
-   ```bash
+```bash
    cd PyNovel
-   ```
+```
 
 3. Instale as dependencias:
 
-   ```bash
+```bash
    pip install -r requirements.txt
-   ```
+```
 
 ## Uso (execucao local)
 
 Na raiz do projeto, execute:
 
 ```bash
-python src/main.py
+   python src/main.py
 ```
 
 ## Uso com Docker Compose
@@ -68,17 +68,17 @@ Pre-requisito: Docker e Docker Compose instalados.
 
 1. Na raiz do projeto, construa a imagem:
 
-   ```bash
+```bash
    # Build só da aplicação (target app)
    docker compose build app
 
    # Build só dos testes (target tests)
    docker compose build tests
-   ```
+```
 
 2. Roda a aplicacao no terminal:
 
-    ```bash
+```bash
    # Rodar app
    docker compose run --rm app
 
@@ -87,7 +87,7 @@ Pre-requisito: Docker e Docker Compose instalados.
 
    # Ver logs do app
    docker compose logs -f app
-   ```
+```
 
 
 ## Contribuição
