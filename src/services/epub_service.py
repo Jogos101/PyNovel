@@ -1,4 +1,4 @@
-import pypub
+import pypub # type: ignore
 import entity.livro
 import entity.capitulo 
 from pathlib import Path
