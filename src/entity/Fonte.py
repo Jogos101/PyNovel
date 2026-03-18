@@ -11,15 +11,15 @@ class Fonte:
         self.next_end = next_disabled
         self.tag_conteudo = tag_conteudo
 
-    def to_string(self):
-        return f"URL Inicial: {self.url_inicial}\nURL Padrão: {self.url_padrao}\nTotal de Capítulos: {self.total_capitulos}\nTítulo: {self.get_titulo()}\nConteúdo: {self.get_conteudo()}\nNext Chap: {self.next_chap}\nNext Disabled: {self.next_end}"
+    def toString(self):
+        return f"URL Inicial: {self.url_inicial}\nURL Padrão: {self.url_padrao}\nTotal de Capítulos: {self.total_capitulos}\nTítulo: {self.getTitulo()}\nConteúdo: {self.getConteudo()}\nNext Chap: {self.next_chap}\nNext Disabled: {self.next_end}"
 
-    def get_titulo(self):
+    def getTitulo(self):
         titulo_filtrado = filter(lambda item: item[1] is not None, self.__titulo.items())
         titulo_dict = dict(titulo_filtrado)
         return titulo_dict
     
-    def get_conteudo(self):
+    def getConteudo(self):
         conteudo_filtrado = filter(lambda item: item[1] is not None, self.__conteudo.items())
         conteudo_dict = dict(conteudo_filtrado)
         return conteudo_dict

@@ -1,6 +1,6 @@
 from entity.livro import Livro
 from entity.fonte import Fonte
-from services.resource_collector_service import ResourceCollector
+from services.resource_collector_service import ResourceCollectorService as ResourceCollector
 import inquirer # type: ignore
 
 class ColetarDadosController:

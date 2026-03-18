@@ -47,7 +47,7 @@ class RequestScraperService(WebScrapingInterface):
 
         return "\n".join(parts).encode("utf-8")
 
-    def runChapter(self, cap):
+    def run_chapter(self, cap):
         time.sleep(0.55)
         response = self.session.get(self.url, headers=self.headers)
         response.raise_for_status()

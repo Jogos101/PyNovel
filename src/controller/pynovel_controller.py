@@ -25,7 +25,7 @@ class PyNovelController:
             for cap in range(1, self.fonte.total_capitulos + 1):
                 try:
                     # Capturar o conteudo do capitulo pela url e registrar no epub
-                    self.epub.criar_capitulo(self.webscraping.runChapter(cap))
+                    self.epub.criar_capitulo(self.webscraping.run_chapter(cap))
 
                     # Atualizar a barra de progresso
                     pbar.update(1)
