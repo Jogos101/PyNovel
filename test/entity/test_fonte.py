@@ -23,10 +23,10 @@ class TestFonte(unittest.TestCase):
         )
 
     def test_get_titulo_filtra_campos_none(self):
-        self.assertEqual(self.fonte.get_titulo(), {"class": "char-titulo"})
+        self.assertEqual(self.fonte.getTitulo(), {"class": "char-titulo"})
 
     def test_get_conteudo_filtra_campos_none(self):
-        self.assertEqual(self.fonte.get_conteudo(), {"id": "char-conteudo"})
+        self.assertEqual(self.fonte.getConteudo(), {"id": "char-conteudo"})
 
     def test_atributos_basicos(self):
         self.assertEqual(self.fonte.url_inicial, "https://site/chapter-1")
