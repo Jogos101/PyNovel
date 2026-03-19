@@ -1,6 +1,6 @@
 import pypub # type: ignore
-import entity.livro
-import entity.capitulo 
+import src.entity.livro
+import src.entity.capitulo 
 from pathlib import Path
 
 class EpubService:

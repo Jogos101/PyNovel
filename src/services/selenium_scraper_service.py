@@ -1,7 +1,6 @@
-from entity.fonte import Fonte
-from entity.capitulo import Capitulo
-from factory.find_element_factory import FindElementFactory
-from services.web_scraping_interface import WebScrapingInterface
+from src.entity.fonte import Fonte
+from src.entity.capitulo import Capitulo
+from src.services.web_scraping_interface import WebScrapingInterface
 from selenium import webdriver # type: ignore
 # from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By # type: ignore
