@@ -5,10 +5,9 @@ class ResourceCollectorService:
     def __init__(self):
         pass
 
-    def listar_fontes(self):
+    def listar_fontes(self, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
         # Listar as fontes disponíveis
-        base_path = Path(__file__).resolve().parent.parent.parent
-        fontes_dir = base_path / "resources" / "sources"
+        fontes_dir = BASE_PATH / "resources" / "sources"
 
         # Cria o diretório de saída se ele não existir
         fontes_dir.mkdir(parents=True, exist_ok=True)
@@ -16,25 +15,23 @@ class ResourceCollectorService:
         fontes = [f.stem for f in fontes_dir.glob("*.json") if f.stem != 'exemplo_source']
         return fontes
 
-    def get_dados_livro(self, fonte_selecionada):
+    def get_dados_livro(self, fonte_selecionada, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
         # Carregar os dados do livro a partir do arquivo JSON
-        base_path = Path(__file__).resolve().parent.parent.parent
-        fonte_path = base_path / "resources" / "sources" / f"{fonte_selecionada}.json"
+        fonte_path = BASE_PATH / "resources" / "sources" / f"{fonte_selecionada}.json"
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        cover_path = base_path / "resources" / "covers" / f"{fonte_selecionada}.jpg"
+        cover_path = BASE_PATH / "resources" / "covers" / f"{fonte_selecionada}.jpg"
         cover = None
         if cover_path.exists():
             cover = str(cover_path)
 
         return (data["Name"], data["autor"], data.get("idioma", "en"), cover)
     
-    def get_dados_fonte(self, fonte_selecionada):
+    def get_dados_fonte(self, fonte_selecionada, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
         # Carregar os dados da fonte a partir do arquivo JSON
-        base_path = Path(__file__).resolve().parent.parent.parent
-        fonte_path = base_path / "resources" / "sources" / f"{fonte_selecionada}.json"
+        fonte_path = BASE_PATH / "resources" / "sources" / f"{fonte_selecionada}.json"
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
