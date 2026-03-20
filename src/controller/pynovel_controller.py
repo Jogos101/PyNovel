@@ -15,6 +15,7 @@ class PyNovelController:
         self.livro = livro
         self.epub = epub
         self.webscraping = webscraping
+        self.epub.setEbook()
 
     def execute(self):
         with tqdm(
