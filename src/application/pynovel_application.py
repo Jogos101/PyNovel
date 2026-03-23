@@ -1,6 +1,5 @@
 import controller.pynovel_controller
 import controller.coletar_dados_controller
-from src.services.ebook_lib_service import EbookLibService
 import factory.web_scraper_factory
 import services.epub_service
 
@@ -14,7 +13,7 @@ class PyNovelApplication:
     def run(self):
         fonte, livro, metodo = self.coletar_dados_controller.coletar()
         webscraping = self.webscraper_factory(metodo, fonte).get_web_scraper()
-        epub = EbookLibService(livro)
+        epub = self.epub_service(livro)
 
         fluxo = self.pynovel_controller(
             fonte= fonte, 
