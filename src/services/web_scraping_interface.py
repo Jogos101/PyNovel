@@ -9,12 +9,6 @@ class WebScrapingInterface(ABC):
         """Overridable"""
         pass
 
-    # Metodo responsavel por formatar o conteudo em xhtml
-    @abstractmethod
-    def format_as_xhtml(self, content_list):
-        """Overridable"""
-        pass
-
     # Metodo principal que processa o capitulo
     @abstractmethod
     def run_chapter(self, cap):

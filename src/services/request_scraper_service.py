@@ -32,20 +32,6 @@ class RequestScraperService(WebScrapingInterface):
         
         return titulo_limpo
 
-    def format_as_xhtml(self, content_list):
-        parts = []
-
-        for paragraph in content_list:
-            text = paragraph.text
-            escaped = (
-                text.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-            )
-            parts.append(f"<p>{escaped}</p>")
-
-        return "\n".join(parts).encode("utf-8")
-
     def run_chapter(self, cap):
         time.sleep(0.55)
         response = self.session.get(self.url, headers=self.headers)
@@ -90,9 +76,10 @@ class RequestScraperService(WebScrapingInterface):
 
         # conteúdo
         conteudo = contentElement.find_all(self.fonte.tag_conteudo)
-        texto_xhtml = self.format_as_xhtml(conteudo)
 
-        return Capitulo(titulo, texto_xhtml, cap, self.url)
+        conteudo_formatado = "".join(str(item) for item in conteudo).replace("```", "").strip()
+
+        return Capitulo(titulo, conteudo_formatado, cap, self.url)
 
     def update_next_button(self):
         raise NotImplementedError("Este método não é aplicável para RequestScraperService, pois não há interação com botões.")

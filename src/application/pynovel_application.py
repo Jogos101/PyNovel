@@ -13,7 +13,7 @@ class PyNovelApplication:
     def run(self):
         fonte, livro, metodo = self.coletar_dados_controller.coletar()
         webscraping = self.webscraper_factory(metodo, fonte).get_web_scraper()
-        epub = self.epub_service.EpubService(livro)
+        epub = self.epub_service(livro)
 
         fluxo = self.pynovel_controller(
             fonte= fonte, 
