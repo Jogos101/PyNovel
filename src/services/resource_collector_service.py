@@ -1,37 +1,32 @@
-from pathlib import Path
 import json
+from src.services.file_path_service import FilePathService
 
 class ResourceCollectorService:
     def __init__(self):
-        pass
+        self.file_path_service = FilePathService()
 
-    def listar_fontes(self, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
-        # Listar as fontes disponíveis
-        fontes_dir = BASE_PATH / "resources" / "sources"
+    def listar_fontes(self, base_path=None):
+        return self.file_path_service.get_all_sources(base_path=base_path)
 
-        # Cria o diretório de saída se ele não existir
-        fontes_dir.mkdir(parents=True, exist_ok=True)
-
-        fontes = [f.stem for f in fontes_dir.glob("*.json") if f.stem != 'exemplo_source']
-        return fontes
-
-    def get_dados_livro(self, fonte_selecionada, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
+    def get_dados_livro(self, fonte_selecionada, base_path=None):
         # Carregar os dados do livro a partir do arquivo JSON
-        fonte_path = BASE_PATH / "resources" / "sources" / f"{fonte_selecionada}.json"
+        fonte_path = self.file_path_service.get_source_path(fonte_selecionada, base_path=base_path)
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        cover_path = BASE_PATH / "resources" / "covers" / f"{fonte_selecionada}.jpg"
         cover = None
-        if cover_path.exists():
+        try:
+            cover_path = self.file_path_service.get_cover_path(fonte_selecionada, base_path=base_path)
             cover = str(cover_path)
+        except FileNotFoundError:
+            pass
 
         return (data["Name"], data["autor"], data.get("idioma", "en"), cover)
     
-    def get_dados_fonte(self, fonte_selecionada, BASE_PATH = Path(__file__).resolve().parent.parent.parent):
+    def get_dados_fonte(self, fonte_selecionada, base_path=None):
         # Carregar os dados da fonte a partir do arquivo JSON
-        fonte_path = BASE_PATH / "resources" / "sources" / f"{fonte_selecionada}.json"
+        fonte_path = self.file_path_service.get_source_path(fonte_selecionada, base_path=base_path)
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)

@@ -15,8 +15,7 @@ class ColetarDadosController:
         inquirer.List('WebScraper',
             message="Qual método de coleta você deseja?",
             choices=[
-                'Request(recommended)', 
-                'Selenium'
+                'Request(recommended)'
             ],
         ),
         ]

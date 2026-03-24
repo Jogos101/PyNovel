@@ -1,4 +1,3 @@
-from services.selenium_scraper_service import SeleniumScraperService
 from services.request_scraper_service import RequestScraperService
 
 class WebScraperFactory:
@@ -8,9 +7,6 @@ class WebScraperFactory:
 
     def get_web_scraper(self):
         match self.metodo:
-            case 'Selenium':
-                print("Running Selenium library")
-                return SeleniumScraperService(self.fonte)
             case 'Request(recommended)':
                 print("Running Request library")
                 return RequestScraperService(self.fonte)
