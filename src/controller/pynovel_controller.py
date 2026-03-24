@@ -3,10 +3,7 @@ import traceback
 # from bs4 import BeautifulSoup
 from tqdm import tqdm # type: ignore
 from entity.livro import Livro
-from entity.capitulo import Capitulo
 from entity.fonte import Fonte
-from services.epub_service import EpubService
-from factory.web_scraper_factory import WebScraperFactory
 
 
 class PyNovelController:

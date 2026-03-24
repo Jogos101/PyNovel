@@ -1,10 +1,10 @@
+import re
+import time
+import requests # type: ignore
 from src.entity.fonte import Fonte
 from src.entity.capitulo import Capitulo
 from src.services.web_scraping_interface import WebScrapingInterface
-import requests # type: ignore
 from bs4 import BeautifulSoup # type: ignore
-import re
-import time
 
 
 class RequestScraperService(WebScrapingInterface):

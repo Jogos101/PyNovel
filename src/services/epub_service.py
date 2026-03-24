@@ -1,9 +1,6 @@
 import os
-import ebooklib # type: ignore
-from ebooklib import epub # type: ignore
-import src.entity.livro
-import src.entity.capitulo 
 import uuid
+from ebooklib import epub # type: ignore
 from src.services.file_path_service import FilePathService
 
 class EpubService:
