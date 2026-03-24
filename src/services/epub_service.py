@@ -10,6 +10,7 @@ class EpubService:
     def __init__(self, livro):
         self.livro = livro
         self.lista_capitulos = []
+        self.BASE_PATH = Path(__file__).resolve().parent.parent.parent
         self.ebook = None
 
     def getEbook(self, file):
@@ -26,12 +27,14 @@ class EpubService:
             self.ebook.add_author(self.livro.autor)
             self.ebook.set_identifier(str(uuid.uuid4()))
 
-    def set_style(self, BASE_PATH=Path(__file__).resolve().parent.parent.parent):
+    def set_style(self, base_path=None):
+        if base_path is None:
+            base_path = self.BASE_PATH
         c = epub.EpubItem()
         c.file_name = 'style/style.css'
         c.media_type = 'text/css'
 
-        style_path = BASE_PATH / 'src' / 'layout' / 'style' / 'style.css'
+        style_path = base_path / 'src' / 'layout' / 'style' / 'style.css'
         if not style_path.exists():
             raise FileNotFoundError(f"Arquivo de estilo não encontrado: {style_path}") 
         
@@ -71,21 +74,23 @@ class EpubService:
         self.ebook.add_item(chapter)
         self.lista_capitulos.append(chapter)
 
-    def formatar_conteudo(self, capitulo):
+    def formatar_conteudo(self, capitulo, base_path=None):
+        if base_path is None:
+            base_path = self.BASE_PATH
+        
+        template_path = base_path / 'src' / 'layout' / 'content' / 'index.html'
+
+        with open(template_path, 'r', encoding='utf-8') as f:
+            template = f.read()
+
         content = capitulo.conteudo.strip() if isinstance(capitulo.conteudo, str) else str(capitulo.conteudo)
         # Formatar o conteúdo para XHTML
-        html_content = f'''
-            <html xmlns="http://www.w3.org/1999/xhtml">
-            <head>
-                <meta charset="UTF-8" />
-                <link rel="stylesheet" type="text/css" href="style/style.css" />
-            </head>
-            <body>
-                <h1>{capitulo.titulo}</h1>
-                {content}
-            </body>
-            </html>
-        '''
+        html_content = template.format(
+            title=self.livro.titulo,
+            chap_title=capitulo.titulo,
+            content=content,
+            url=capitulo.url
+        )
         return html_content.encode('utf-8')
 
     def gerar_epub(self):
@@ -99,8 +104,10 @@ class EpubService:
         arquivo = self.set_arquivo()
         epub.write_epub(str(arquivo), self.ebook)
 
-    def set_arquivo(self, BASE_PATH=Path(__file__).resolve().parent.parent.parent):
-        output_dir = BASE_PATH / "resources" / "books"
+    def set_arquivo(self, base_path=None):
+        if base_path is None:
+            base_path = self.BASE_PATH
+        output_dir = base_path / "resources" / "books"
         output_dir.mkdir(parents=True, exist_ok=True)
 
         caminho_arquivo = self.controlar_concorrencia(output_dir)
