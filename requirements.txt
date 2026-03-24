@@ -1,5 +1,4 @@
 tqdm
-selenium
 requests
 beautifulsoup4
 inquirer
