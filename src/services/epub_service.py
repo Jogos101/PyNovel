@@ -25,15 +25,19 @@ class EpubService:
             self.ebook.set_identifier(str(uuid.uuid4()))
 
     def set_style(self):
-        c = epub.EpubItem()
-        c.file_name = 'style/style.css'
-        c.media_type = 'text/css'
+        c = epub.EpubItem(
+            uid="style_nav",
+            file_name="style/nav.css",
+            media_type="text/css"
+        )
 
         style_path = self.file_path_service.get_style_path()
         
         with open(style_path, 'r') as style_file:
             c.content = style_file.read()
         self.ebook.add_item(c)
+
+
 
     def set_cover(self):
         try:
