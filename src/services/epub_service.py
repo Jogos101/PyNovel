@@ -3,14 +3,14 @@ import ebooklib # type: ignore
 from ebooklib import epub # type: ignore
 import src.entity.livro
 import src.entity.capitulo 
-from pathlib import Path
 import uuid
+from src.services.file_path_service import FilePathService
 
 class EpubService:
     def __init__(self, livro):
         self.livro = livro
         self.lista_capitulos = []
-        self.BASE_PATH = Path(__file__).resolve().parent.parent.parent
+        self.file_path_service = FilePathService()
         self.ebook = None
 
     def getEbook(self, file):
@@ -27,16 +27,12 @@ class EpubService:
             self.ebook.add_author(self.livro.autor)
             self.ebook.set_identifier(str(uuid.uuid4()))
 
-    def set_style(self, base_path=None):
-        if base_path is None:
-            base_path = self.BASE_PATH
+    def set_style(self):
         c = epub.EpubItem()
         c.file_name = 'style/style.css'
         c.media_type = 'text/css'
 
-        style_path = base_path / 'src' / 'layout' / 'style' / 'style.css'
-        if not style_path.exists():
-            raise FileNotFoundError(f"Arquivo de estilo não encontrado: {style_path}") 
+        style_path = self.file_path_service.get_style_path()
         
         with open(style_path, 'r') as style_file:
             c.content = style_file.read()
@@ -74,11 +70,8 @@ class EpubService:
         self.ebook.add_item(chapter)
         self.lista_capitulos.append(chapter)
 
-    def formatar_conteudo(self, capitulo, base_path=None):
-        if base_path is None:
-            base_path = self.BASE_PATH
-        
-        template_path = base_path / 'src' / 'layout' / 'content' / 'index.html'
+    def formatar_conteudo(self, capitulo):
+        template_path = self.file_path_service.get_layout_content_path()
 
         with open(template_path, 'r', encoding='utf-8') as f:
             template = f.read()
@@ -104,11 +97,8 @@ class EpubService:
         arquivo = self.set_arquivo()
         epub.write_epub(str(arquivo), self.ebook)
 
-    def set_arquivo(self, base_path=None):
-        if base_path is None:
-            base_path = self.BASE_PATH
-        output_dir = base_path / "resources" / "books"
-        output_dir.mkdir(parents=True, exist_ok=True)
+    def set_arquivo(self):
+        output_dir = self.file_path_service.get_book_output_path()
 
         caminho_arquivo = self.controlar_concorrencia(output_dir)
         return caminho_arquivo
