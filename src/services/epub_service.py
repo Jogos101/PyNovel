@@ -1,6 +1,9 @@
+import re
 import os
 import uuid
+import ebooklib
 from ebooklib import epub # type: ignore
+from bs4 import BeautifulSoup # type: ignore
 from src.services.file_path_service import FilePathService
 
 class EpubService:
@@ -24,6 +27,37 @@ class EpubService:
             self.ebook.add_author(self.livro.autor)
             self.ebook.set_identifier(str(uuid.uuid4()))
 
+    def getSetEbook(self, file):
+        if self.ebook is None:
+            self.ebook = epub.read_epub(str(file))
+
+    def getUltimoCapitulo(self):
+        chapters = []
+        for item in self.ebook.get_items():
+            if item.get_type() == ebooklib.ITEM_DOCUMENT:
+                chapters.append(item)
+
+        if chapters:
+            last_chapter = chapters[-1]
+            cap = self.selecionar_numero_ultimo_cap(last_chapter.get_content())
+            print(cap)
+            return int(cap)
+        else:
+            return None
+        
+    def selecionar_numero_ultimo_cap(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
+
+        links = soup.find_all('a')
+
+        if links:
+            ultimo_texto = links[-1].get_text()
+            
+            match = re.search(r'Chapter (\d+)', ultimo_texto)
+            
+            if match:
+                return match.group(1)
+
     def set_style(self):
         c = epub.EpubItem()
         c.file_name = 'style/style.css'
@@ -43,11 +77,7 @@ class EpubService:
         except Exception as e:
             print(f"Erro ao definir a capa: {e}")
 
-    def getSetEbook(self, file):
-        if self.ebook is None:
-            self.ebook = epub.read_epub(file)
-
-    def setToc(self):
+    def set_Toc(self):
         self.ebook.toc = (self.lista_capitulos)
         self.ebook.spine = ['nav'] + self.lista_capitulos
 
@@ -83,17 +113,6 @@ class EpubService:
         )
         return html_content.encode('utf-8')
 
-    def gerar_epub(self):
-        self.set_style()
-
-        self.setToc()
-
-        self.ebook.add_item(epub.EpubNcx())
-        self.ebook.add_item(epub.EpubNav())
-
-        arquivo = self.set_arquivo()
-        epub.write_epub(str(arquivo), self.ebook)
-
     def set_arquivo(self):
         output_dir = self.file_path_service.get_book_output_path()
 
@@ -111,3 +130,17 @@ class EpubService:
             caminho_arquivo = output_dir / f"{nome_arquivo}_{contador}{extensao}"
             contador += 1
         return caminho_arquivo
+
+    def gerar_epub(self):
+        self.set_style()
+
+        self.set_Toc()
+
+        self.ebook.add_item(epub.EpubNcx())
+        self.ebook.add_item(epub.EpubNav())
+
+        arquivo = self.set_arquivo()
+        epub.write_epub(str(arquivo), self.ebook)
+
+    def atualiza_epub(self, path):
+        epub.write_epub(str(path), self.ebook)

@@ -44,6 +44,22 @@ class FilePathService:
             raise FileNotFoundError(f"Arquivo de fonte não encontrado: {source_path}")
         return source_path
     
+    def get_all_books(self, base_path=None):
+        if base_path is None:
+            base_path = self.BASE_PATH
+        books_dir = base_path / "resources" / "books"
+        books_dir.mkdir(parents=True, exist_ok=True)
+        books = [f.stem for f in books_dir.glob("*.epub")]
+        return books
+    
+    def get_book_path(self, book, base_path=None):
+        if base_path is None:
+            base_path = self.BASE_PATH
+        book_path = base_path / "resources" / "books" / f"{book}.epub"
+        if not book_path.exists():
+            raise FileNotFoundError(f"Livro não encontrado: {book_path}")
+        return book_path
+
     def get_book_output_path(self, base_path=None):
         if base_path is None:
             base_path = self.BASE_PATH

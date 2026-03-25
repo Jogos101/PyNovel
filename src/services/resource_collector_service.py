@@ -7,26 +7,29 @@ class ResourceCollectorService:
 
     def listar_fontes(self, base_path=None):
         return self.file_path_service.get_all_sources(base_path=base_path)
+    
+    def listar_livros(self, base_path=None):
+        return self.file_path_service.get_all_books(base_path=base_path)
 
-    def get_dados_livro(self, fonte_selecionada, base_path=None):
+    def get_dados_livro(self, fonte, base_path=None):
         # Carregar os dados do livro a partir do arquivo JSON
-        fonte_path = self.file_path_service.get_source_path(fonte_selecionada, base_path=base_path)
+        fonte_path = self.file_path_service.get_source_path(fonte, base_path=base_path)
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
         cover = None
         try:
-            cover_path = self.file_path_service.get_cover_path(fonte_selecionada, base_path=base_path)
+            cover_path = self.file_path_service.get_cover_path(fonte, base_path=base_path)
             cover = str(cover_path)
         except FileNotFoundError:
             pass
 
         return (data["Name"], data["autor"], data.get("idioma", "en"), cover)
     
-    def get_dados_fonte(self, fonte_selecionada, base_path=None):
+    def get_dados_fonte(self, fonte, base_path=None):
         # Carregar os dados da fonte a partir do arquivo JSON
-        fonte_path = self.file_path_service.get_source_path(fonte_selecionada, base_path=base_path)
+        fonte_path = self.file_path_service.get_source_path(fonte, base_path=base_path)
 
         with open(fonte_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
