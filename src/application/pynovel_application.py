@@ -1,13 +1,6 @@
-<<<<<<< Updated upstream
-import controller.pynovel_controller
-import controller.coletar_dados_controller
-import factory.web_scraper_factory
-import services.epub_service
-=======
 from factory.web_scraper_factory import WebScraperFactory
 from factory.operation_factory import OperationFactory
 
->>>>>>> Stashed changes
 
 class PyNovelApplication:
     def __init__(self, coletar_dados_controller, pynovel_controller):
