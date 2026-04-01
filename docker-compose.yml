@@ -6,6 +6,9 @@ services:
     container_name: pynovel-running
     stdin_open: true
     tty: true
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
     volumes:
       - ./resources/books:/app/resources/books
     restart: unless-stopped

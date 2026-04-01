@@ -1,4 +1,6 @@
 import traceback
+import logging
+logger = logging.getLogger(__name__)
 
 # from bs4 import BeautifulSoup
 from src.services.file_path_service import FilePathService
@@ -30,6 +32,8 @@ class PyNovelController:
         self.webscraping.end_scraping()
 
     def create_epub(self):
+        logger.info('Creating EPUB - Start')
+
         self.epub_service.setEbook()
 
         with tqdm(
@@ -58,13 +62,15 @@ class PyNovelController:
 
                     self.atualiza_url(cap)
                 except Exception as e:
-                    print(f"Erro ao processar o capítulo {cap}: {e}")
-                    traceback.print_exc()
+                    logger.exception(f"Erro ao processar o capítulo {cap}: {e}")
                     break
-
+            
+            logger.info('Creating EPUB - End')
             self.end_process()
 
     def update_epub(self):
+        logger.info('Updating EPUB - Start')
+
         self.book_path = self.file_path_service.get_book_path(self.epub)
         self.epub_service.getSetEbook(self.book_path)
         ultimo_cap = self.epub_service.getUltimoCapitulo()
@@ -96,8 +102,8 @@ class PyNovelController:
 
                     self.atualiza_url(cap)
                 except Exception as e:
-                    print(f"Erro ao processar o capítulo {cap}: {e}")
-                    traceback.print_exc()
+                    logger.exception(f"Erro ao processar o capítulo {cap}: {e}")
                     break
-
+            
+            logger.info('Updating EPUB - End')
             self.atualiza_epub(self.book_path)
